@@ -6,87 +6,43 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
 import * as strings from 'AnnouncementDashboardWebPartStrings';
 import AnnouncementDashboard from './components/AnnouncementDashboard';
 import { IAnnouncementDashboardProps } from './components/IAnnouncementDashboardProps';
+import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
+import { CalloutTriggers } from '@pnp/spfx-property-controls/lib/PropertyFieldHeader';
+import { PropertyFieldChoiceGroupWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldChoiceGroupWithCallout';
+import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldToggleWithCallout';
+import { PropertyFieldSliderWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldSliderWithCallout';
+import { PropertyFieldColorPicker, PropertyFieldColorPickerStyle } from '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker';
 
 export interface IAnnouncementDashboardWebPartProps {
-  description: string;
+  wpTitle: string;
+  listId: string;
+  layoutStyle: string;
+  enableFiltering: boolean;
+  numberOfItems: number;
+  language: string;
+  headerBackgroundColor: string;
 }
 
 export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<IAnnouncementDashboardWebPartProps> {
-
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
-
   public render(): void {
     const element: React.ReactElement<IAnnouncementDashboardProps> = React.createElement(
       AnnouncementDashboard,
       {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        title: this.properties.wpTitle,
+        listId: this.properties.listId,
+        layoutStyle: this.properties.layoutStyle,
+        enableFiltering: this.properties.enableFiltering,
+        numberOfItems: this.properties.numberOfItems,
+        language: this.properties.language,
+        headerBackgroundColor: this.properties.headerBackgroundColor
       }
     );
 
     ReactDom.render(element, this.domElement);
-  }
-
-  protected onInit(): Promise<void> {
-    return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
-    });
-  }
-
-
-
-  private _getEnvironmentMessage(): Promise<string> {
-    if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
-      return this.context.sdks.microsoftTeams.teamsJs.app.getContext()
-        .then(context => {
-          let environmentMessage: string = '';
-          switch (context.app.host.name) {
-            case 'Office': // running in Office
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOffice : strings.AppOfficeEnvironment;
-              break;
-            case 'Outlook': // running in Outlook
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOutlook : strings.AppOutlookEnvironment;
-              break;
-            case 'Teams': // running in Teams
-            case 'TeamsModern':
-              environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentTeams : strings.AppTeamsTabEnvironment;
-              break;
-            default:
-              environmentMessage = strings.UnknownEnvironment;
-          }
-
-          return environmentMessage;
-        });
-    }
-
-    return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
-  }
-
-  protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-    if (!currentTheme) {
-      return;
-    }
-
-    this._isDarkTheme = !!currentTheme.isInverted;
-    const {
-      semanticColors
-    } = currentTheme;
-
-    if (semanticColors) {
-      this.domElement.style.setProperty('--bodyText', semanticColors.bodyText || null);
-      this.domElement.style.setProperty('--link', semanticColors.link || null);
-      this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
-    }
-
   }
 
   protected onDispose(): void {
@@ -108,8 +64,90 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('wpTitle', {
+                  label: strings.WebPartTitleLabel
+                }),
+                PropertyFieldListPicker('listId', {
+                  label: strings.ListIdLabel,
+                  selectedList: this.properties.listId,
+                  includeHidden: false,
+                  orderBy: PropertyFieldListPickerOrderBy.Title,
+                  disabled: false,
+                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                  properties: this.properties,
+                  context: this.context,
+                  deferredValidationTime: 0,
+                  key: 'listPickerFieldId',
+                  multiSelect: false
+                }),
+                PropertyFieldChoiceGroupWithCallout('layoutStyle', {
+                  calloutContent: React.createElement('div', {}, strings.LayoutStyleCalloutContent),
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'choiceGroupWithCalloutFieldId',
+                  label: strings.LayoutStyleLabel,
+                  options: [{
+                    key: 'card',
+                    text: strings.LayoutStyleCard,
+                    checked: this.properties.layoutStyle === 'card'
+                  }, {
+                    key: 'compact',
+                    text: strings.LayoutStyleCompact,
+                    checked: this.properties.layoutStyle === 'compact'
+                  }, {
+                    key: 'table',
+                    text: strings.LayoutStyleTable,
+                    checked: this.properties.layoutStyle === 'table'
+                  }]
+                }),
+                PropertyFieldToggleWithCallout('enableFiltering', {
+                  calloutTrigger: CalloutTriggers.Click,
+                  key: 'toggleInfoHeaderFieldId',
+                  label: strings.EnableFilteringLabel,
+                  calloutContent: React.createElement('p', {}, strings.EnableFilteringCalloutContent),
+                  onText: strings.EnableFilteringOnText,
+                  offText: strings.EnableFilteringOffText,
+                  checked: this.properties.enableFiltering
+                }),
+                PropertyFieldSliderWithCallout('numberOfItems', {
+                  calloutContent: React.createElement('div', {}, strings.NumberOfItemsCalloutContent),
+                  calloutTrigger: CalloutTriggers.Click,
+                  calloutWidth: 200,
+                  key: 'sliderWithCalloutFieldId',
+                  label: strings.NumberOfItemsLabel,
+                  max: 100,
+                  min: 0,
+                  step: 1,
+                  showValue: true,
+                  value: this.properties.numberOfItems,
+                  debounce: 1000
+                }),
+                PropertyFieldChoiceGroupWithCallout('language', {
+                  calloutContent: React.createElement('div', {}, strings.LanguageCalloutContent),
+                  calloutTrigger: CalloutTriggers.Hover,
+                  key: 'choiceGroupWithCalloutFieldId',
+                  label: strings.LanguageLabel,
+                  options: [{
+                    key: 'en',
+                    text: strings.LanguageEnglish,
+                    checked: this.properties.language === 'en'
+                  }, {
+                    key: 'ar',
+                    text: strings.LanguageArabic,
+                    checked: this.properties.language === 'ar'
+                  }]
+                }),
+                PropertyFieldColorPicker('headerBackgroundColor', {
+                  label: strings.HeaderBackgroundColorLabel,
+                  selectedColor: this.properties.headerBackgroundColor,
+                  onPropertyChange: this.onPropertyPaneFieldChanged,
+                  properties: this.properties,
+                  disabled: false,
+                  debounce: 1000,
+                  isHidden: false,
+                  alphaSliderHidden: false,
+                  style: PropertyFieldColorPickerStyle.Full,
+                  iconName: 'Precipitation',
+                  key: 'headerBackgroundColorFieldId'
                 })
               ]
             }

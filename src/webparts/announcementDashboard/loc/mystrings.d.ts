@@ -11,6 +11,29 @@ declare interface IAnnouncementDashboardWebPartStrings {
   AppOfficeEnvironment: string;
   AppOutlookEnvironment: string;
   UnknownEnvironment: string;
+
+  WebPartTitleLabel: string;
+  ListIdLabel: string;
+  LayoutStyleLabel: string;
+  EnableFilteringLabel: string;
+  NumberOfItemsLabel: string;
+  LanguageLabel: string;
+  HeaderBackgroundColorLabel: string;
+
+  LayoutStyleCalloutContent: string;
+  LayoutStyleCard: string;
+  LayoutStyleCompact: string;
+  LayoutStyleTable: string;
+
+  EnableFilteringCalloutContent: string;
+  EnableFilteringOnText: string;
+  EnableFilteringOffText: string;
+
+  NumberOfItemsCalloutContent: string;
+
+  LanguageCalloutContent: string;
+  LanguageEnglish: string;
+  LanguageArabic: string;
 }
 
 declare module 'AnnouncementDashboardWebPartStrings' {

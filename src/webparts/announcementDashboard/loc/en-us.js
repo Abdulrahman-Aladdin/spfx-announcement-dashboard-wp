@@ -1,16 +1,29 @@
 define([], function() {
   return {
-    "PropertyPaneDescription": "Description",
-    "BasicGroupName": "Group Name",
-    "DescriptionFieldLabel": "Description Field",
-    "AppLocalEnvironmentSharePoint": "The app is running on your local environment as SharePoint web part",
-    "AppLocalEnvironmentTeams": "The app is running on your local environment as Microsoft Teams app",
-    "AppLocalEnvironmentOffice": "The app is running on your local environment in office.com",
-    "AppLocalEnvironmentOutlook": "The app is running on your local environment in Outlook",
-    "AppSharePointEnvironment": "The app is running on SharePoint page",
-    "AppTeamsTabEnvironment": "The app is running in Microsoft Teams",
-    "AppOfficeEnvironment": "The app is running in office.com",
-    "AppOutlookEnvironment": "The app is running in Outlook",
-    "UnknownEnvironment": "The app is running in an unknown environment"
+    "PropertyPaneDescription": "Configure the announcement dashboard web part properties below.",
+    "BasicGroupName": "Web Part Properties",
+
+    "WebPartTitleLabel": "Title",
+    "ListIdLabel": "Targeted List",
+    "LayoutStyleLabel": "Layout Style",
+    "EnableFilteringLabel": "Filtering",
+    "NumberOfItemsLabel": "Number of Items to Display",
+    "LanguageLabel": "Language",
+    "HeaderBackgroundColorLabel": "Header Background Color",
+
+    "LayoutStyleCalloutContent": "Choose the layout style for displaying announcements.",
+    "LayoutStyleCard": "Card",
+    "LayoutStyleCompact": "Compact",
+    "LayoutStyleTable": "Table",
+
+    "EnableFilteringCalloutContent": "Toggle to enable or disable filtering of announcements.",
+    "EnableFilteringOnText": "Enabled",
+    "EnableFilteringOffText": "Disabled",
+
+    "NumberOfItemsCalloutContent": "Select the number of announcements to display (1-20).",
+
+    "LanguageCalloutContent": "Select the language for the announcement dashboard.",
+    "LanguageEnglish": "English",
+    "LanguageArabic": "Arabic"
   }
 });

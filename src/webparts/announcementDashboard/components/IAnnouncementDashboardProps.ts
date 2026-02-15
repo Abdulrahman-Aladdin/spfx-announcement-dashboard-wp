@@ -1,7 +1,9 @@
 export interface IAnnouncementDashboardProps {
-  description: string;
-  isDarkTheme: boolean;
-  environmentMessage: string;
-  hasTeamsContext: boolean;
-  userDisplayName: string;
+  title: string;
+  listId: string;
+  layoutStyle: string;
+  enableFiltering: boolean;
+  numberOfItems: number;
+  language: string;
+  headerBackgroundColor: string;
 }
