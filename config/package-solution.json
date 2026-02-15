@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "announcement-dashboard-webpart-client-side-solution",
+    "id": "cc2db098-31a1-4e6a-bad2-b1080019ca38",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.21.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "announcement-dashboard-webpart description"
+      },
+      "longDescription": {
+        "default": "announcement-dashboard-webpart description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "announcement-dashboard-webpart Feature",
+        "description": "The feature that activates elements of the announcement-dashboard-webpart solution.",
+        "id": "83dec0b9-7862-4c0a-81e0-c791e97f8d08",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/announcement-dashboard-webpart.sppkg"
+  }
+}
