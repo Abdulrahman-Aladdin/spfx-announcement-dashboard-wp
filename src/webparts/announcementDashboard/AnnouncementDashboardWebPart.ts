@@ -7,10 +7,9 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
-
+import { IAnnouncementDashboardWebPartStrings } from './loc/mystrings';
 import arStrings from './loc/ar-sa';
 import enStrings from './loc/en-us';
-import { IAnnouncementDashboardWebPartStrings } from './loc/mystrings';
 import AnnouncementDashboard from './components/AnnouncementDashboard';
 import { IAnnouncementDashboardProps } from './components/IAnnouncementDashboardProps';
 import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
@@ -33,8 +32,8 @@ export interface IAnnouncementDashboardWebPartProps {
 }
 
 export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<IAnnouncementDashboardWebPartProps> {
-  private strings: IAnnouncementDashboardWebPartStrings = enStrings;
-  private directtion: 'rtl' | 'ltr' = 'ltr';
+  private strings: IAnnouncementDashboardWebPartStrings;
+  private directtion: 'rtl' | 'ltr';
 
   private getStrings(): IAnnouncementDashboardWebPartStrings {
     return this.properties.language === 'ar' ? arStrings : enStrings;
@@ -45,7 +44,10 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
   }
 
   protected onInit(): Promise<void> {
+    this.properties.language = this.context.pageContext.cultureInfo.currentUICultureName === 'ar-SA' ? 'ar' : 'en';
     this.strings = this.getStrings();
+    this.directtion = this.getDirection();
+    this.domElement.setAttribute('dir', this.directtion);
     return super.onInit();
   }
 
@@ -157,7 +159,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   step: 1,
                   showValue: true,
                   value: this.properties.numberOfItems,
-                  debounce: 1000
+                  debounce: 10
                 }),
                 PropertyFieldChoiceGroupWithCallout('language', {
                   calloutContent: React.createElement('div', {}, this.strings.LanguageCalloutContent),
@@ -180,7 +182,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
                   disabled: false,
-                  debounce: 1000,
+                  debounce: 10,
                   isHidden: false,
                   alphaSliderHidden: false,
                   style: PropertyFieldColorPickerStyle.Full,
@@ -193,7 +195,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
                   disabled: false,
-                  debounce: 1000,
+                  debounce: 10,
                   isHidden: false,
                   alphaSliderHidden: false,
                   style: PropertyFieldColorPickerStyle.Full,
