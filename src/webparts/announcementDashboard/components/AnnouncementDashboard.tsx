@@ -3,7 +3,8 @@ import type { IAnnouncementDashboardProps } from './IAnnouncementDashboardProps'
 
 export default function AnnouncementDashboard(props: IAnnouncementDashboardProps): React.ReactElement<IAnnouncementDashboardProps> {
   const {
-    title,
+    enTitle,
+    arTitle,
     listId,
     layoutStyle,
     enableFiltering,
@@ -14,7 +15,7 @@ export default function AnnouncementDashboard(props: IAnnouncementDashboardProps
 
   return (
     <section>
-      <h2>{title}</h2>
+      <h2>{language === 'ar' ? arTitle : enTitle}</h2>
       <p>List Id: {listId}</p>
       <p>Layout Style: {layoutStyle}</p>
       <p>Enable Filtering: {enableFiltering ? 'Yes' : 'No'}</p>

@@ -1,5 +1,6 @@
 export interface IAnnouncementDashboardProps {
-  title: string;
+  enTitle: string;
+  arTitle: string;
   listId: string;
   layoutStyle: string;
   enableFiltering: boolean;

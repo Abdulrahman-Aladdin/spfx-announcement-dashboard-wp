@@ -1,4 +1,4 @@
-declare interface IAnnouncementDashboardWebPartStrings {
+export declare interface IAnnouncementDashboardWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
   DescriptionFieldLabel: string;
@@ -12,7 +12,8 @@ declare interface IAnnouncementDashboardWebPartStrings {
   AppOutlookEnvironment: string;
   UnknownEnvironment: string;
 
-  WebPartTitleLabel: string;
+  WebPartEnTitleLabel: string;
+  WebPartArTitleLabel: string;
   ListIdLabel: string;
   LayoutStyleLabel: string;
   EnableFilteringLabel: string;

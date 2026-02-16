@@ -7,7 +7,10 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
-import * as strings from 'AnnouncementDashboardWebPartStrings';
+
+import arStrings from './loc/ar-sa';
+import enStrings from './loc/en-us';
+import { IAnnouncementDashboardWebPartStrings } from './loc/mystrings';
 import AnnouncementDashboard from './components/AnnouncementDashboard';
 import { IAnnouncementDashboardProps } from './components/IAnnouncementDashboardProps';
 import { PropertyFieldListPicker, PropertyFieldListPickerOrderBy } from '@pnp/spfx-property-controls/lib/PropertyFieldListPicker';
@@ -18,7 +21,8 @@ import { PropertyFieldSliderWithCallout } from '@pnp/spfx-property-controls/lib/
 import { PropertyFieldColorPicker, PropertyFieldColorPickerStyle } from '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker';
 
 export interface IAnnouncementDashboardWebPartProps {
-  wpTitle: string;
+  wpEnTitle: string;
+  wpArTitle: string;
   listId: string;
   layoutStyle: string;
   enableFiltering: boolean;
@@ -28,11 +32,28 @@ export interface IAnnouncementDashboardWebPartProps {
 }
 
 export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<IAnnouncementDashboardWebPartProps> {
+  private strings: IAnnouncementDashboardWebPartStrings = enStrings;
+  private directtion: 'rtl' | 'ltr' = 'ltr';
+
+  private getStrings(): IAnnouncementDashboardWebPartStrings {
+    return this.properties.language === 'ar' ? arStrings : enStrings;
+  }
+
+  private getDirection(): 'rtl' | 'ltr' {
+    return this.properties.language === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  protected onInit(): Promise<void> {
+    this.strings = this.getStrings();
+    return super.onInit();
+  }
+
   public render(): void {
     const element: React.ReactElement<IAnnouncementDashboardProps> = React.createElement(
       AnnouncementDashboard,
       {
-        title: this.properties.wpTitle,
+        enTitle: this.properties.wpEnTitle,
+        arTitle: this.properties.wpArTitle,
         listId: this.properties.listId,
         layoutStyle: this.properties.layoutStyle,
         enableFiltering: this.properties.enableFiltering,
@@ -53,22 +74,37 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
     return Version.parse('1.0');
   }
 
+  protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: unknown, newValue: unknown): void {
+    super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
+
+    if (propertyPath === 'language' && oldValue !== newValue) {
+      this.strings = this.getStrings();
+      this.directtion = this.getDirection();
+      this.domElement.setAttribute('dir', this.directtion);
+      this.context.propertyPane.refresh();
+      this.render();
+    }
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: this.strings.PropertyPaneDescription
           },
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              groupName: this.strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('wpTitle', {
-                  label: strings.WebPartTitleLabel
+                PropertyPaneTextField('wpEnTitle', {
+                  label: this.strings.WebPartEnTitleLabel
+                }),
+                PropertyPaneTextField('wpArTitle', {
+                  label: this.strings.WebPartArTitleLabel
                 }),
                 PropertyFieldListPicker('listId', {
-                  label: strings.ListIdLabel,
+                  label: this.strings.ListIdLabel,
                   selectedList: this.properties.listId,
                   includeHidden: false,
                   orderBy: PropertyFieldListPickerOrderBy.Title,
@@ -81,63 +117,63 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   multiSelect: false
                 }),
                 PropertyFieldChoiceGroupWithCallout('layoutStyle', {
-                  calloutContent: React.createElement('div', {}, strings.LayoutStyleCalloutContent),
+                  calloutContent: React.createElement('div', {}, this.strings.LayoutStyleCalloutContent),
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'choiceGroupWithCalloutFieldId',
-                  label: strings.LayoutStyleLabel,
+                  label: this.strings.LayoutStyleLabel,
                   options: [{
                     key: 'card',
-                    text: strings.LayoutStyleCard,
+                    text: this.strings.LayoutStyleCard,
                     checked: this.properties.layoutStyle === 'card'
                   }, {
                     key: 'compact',
-                    text: strings.LayoutStyleCompact,
+                    text: this.strings.LayoutStyleCompact,
                     checked: this.properties.layoutStyle === 'compact'
                   }, {
                     key: 'table',
-                    text: strings.LayoutStyleTable,
+                    text: this.strings.LayoutStyleTable,
                     checked: this.properties.layoutStyle === 'table'
                   }]
                 }),
                 PropertyFieldToggleWithCallout('enableFiltering', {
                   calloutTrigger: CalloutTriggers.Click,
                   key: 'toggleInfoHeaderFieldId',
-                  label: strings.EnableFilteringLabel,
-                  calloutContent: React.createElement('p', {}, strings.EnableFilteringCalloutContent),
-                  onText: strings.EnableFilteringOnText,
-                  offText: strings.EnableFilteringOffText,
+                  label: this.strings.EnableFilteringLabel,
+                  calloutContent: React.createElement('p', {}, this.strings.EnableFilteringCalloutContent),
+                  onText: this.strings.EnableFilteringOnText,
+                  offText: this.strings.EnableFilteringOffText,
                   checked: this.properties.enableFiltering
                 }),
                 PropertyFieldSliderWithCallout('numberOfItems', {
-                  calloutContent: React.createElement('div', {}, strings.NumberOfItemsCalloutContent),
+                  calloutContent: React.createElement('div', {}, this.strings.NumberOfItemsCalloutContent),
                   calloutTrigger: CalloutTriggers.Click,
                   calloutWidth: 200,
                   key: 'sliderWithCalloutFieldId',
-                  label: strings.NumberOfItemsLabel,
-                  max: 100,
-                  min: 0,
+                  label: this.strings.NumberOfItemsLabel,
+                  max: 20,
+                  min: 1,
                   step: 1,
                   showValue: true,
                   value: this.properties.numberOfItems,
                   debounce: 1000
                 }),
                 PropertyFieldChoiceGroupWithCallout('language', {
-                  calloutContent: React.createElement('div', {}, strings.LanguageCalloutContent),
+                  calloutContent: React.createElement('div', {}, this.strings.LanguageCalloutContent),
                   calloutTrigger: CalloutTriggers.Hover,
                   key: 'choiceGroupWithCalloutFieldId',
-                  label: strings.LanguageLabel,
+                  label: this.strings.LanguageLabel,
                   options: [{
                     key: 'en',
-                    text: strings.LanguageEnglish,
+                    text: this.strings.LanguageEnglish,
                     checked: this.properties.language === 'en'
                   }, {
                     key: 'ar',
-                    text: strings.LanguageArabic,
+                    text: this.strings.LanguageArabic,
                     checked: this.properties.language === 'ar'
                   }]
                 }),
                 PropertyFieldColorPicker('headerBackgroundColor', {
-                  label: strings.HeaderBackgroundColorLabel,
+                  label: this.strings.HeaderBackgroundColorLabel,
                   selectedColor: this.properties.headerBackgroundColor,
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
