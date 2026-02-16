@@ -7,4 +7,5 @@ export interface IAnnouncementDashboardProps {
   numberOfItems: number;
   language: string;
   headerBackgroundColor: string;
+  headerTextColor: string;
 }

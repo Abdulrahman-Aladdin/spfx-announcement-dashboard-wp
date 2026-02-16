@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { IAnnouncementDashboardProps } from './IAnnouncementDashboardProps';
+import styles from './AnnouncementDashboard.module.scss';
 
 export default function AnnouncementDashboard(props: IAnnouncementDashboardProps): React.ReactElement<IAnnouncementDashboardProps> {
   const {
@@ -10,18 +11,25 @@ export default function AnnouncementDashboard(props: IAnnouncementDashboardProps
     enableFiltering,
     numberOfItems,
     language,
-    headerBackgroundColor
+    headerBackgroundColor,
+    headerTextColor
   } = props;
 
   return (
     <section>
-      <h2>{language === 'ar' ? arTitle : enTitle}</h2>
+      <h2
+        style={{ backgroundColor: headerBackgroundColor, color: headerTextColor }}
+        className={styles.header}
+      >
+        {language === 'ar' ? arTitle : enTitle}
+      </h2>
       <p>List Id: {listId}</p>
       <p>Layout Style: {layoutStyle}</p>
       <p>Enable Filtering: {enableFiltering ? 'Yes' : 'No'}</p>
       <p>Number of Items: {numberOfItems}</p>
       <p>Language: {language}</p>
       <p>Header Background Color: {headerBackgroundColor}</p>
+      <p>Header Text Color: {headerTextColor}</p>
     </section>
   )
 }

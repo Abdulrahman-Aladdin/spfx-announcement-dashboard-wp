@@ -29,6 +29,7 @@ export interface IAnnouncementDashboardWebPartProps {
   numberOfItems: number;
   language: string;
   headerBackgroundColor: string;
+  headerTextColor: string;
 }
 
 export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<IAnnouncementDashboardWebPartProps> {
@@ -59,7 +60,8 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
         enableFiltering: this.properties.enableFiltering,
         numberOfItems: this.properties.numberOfItems,
         language: this.properties.language,
-        headerBackgroundColor: this.properties.headerBackgroundColor
+        headerBackgroundColor: this.properties.headerBackgroundColor,
+        headerTextColor: this.properties.headerTextColor
       }
     );
 
@@ -184,6 +186,19 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   style: PropertyFieldColorPickerStyle.Full,
                   iconName: 'Precipitation',
                   key: 'headerBackgroundColorFieldId'
+                }),
+                PropertyFieldColorPicker('headerTextColor', {
+                  label: this.strings.HeaderTextColorLabel,
+                  selectedColor: this.properties.headerTextColor,
+                  onPropertyChange: this.onPropertyPaneFieldChanged,
+                  properties: this.properties,
+                  disabled: false,
+                  debounce: 1000,
+                  isHidden: false,
+                  alphaSliderHidden: false,
+                  style: PropertyFieldColorPickerStyle.Full,
+                  iconName: 'Precipitation',
+                  key: 'headerTextColorFieldId'
                 })
               ]
             }

@@ -20,6 +20,7 @@ export declare interface IAnnouncementDashboardWebPartStrings {
   NumberOfItemsLabel: string;
   LanguageLabel: string;
   HeaderBackgroundColorLabel: string;
+  HeaderTextColorLabel: string;
 
   LayoutStyleCalloutContent: string;
   LayoutStyleCard: string;

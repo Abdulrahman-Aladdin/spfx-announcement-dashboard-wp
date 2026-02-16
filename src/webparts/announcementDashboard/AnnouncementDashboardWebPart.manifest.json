@@ -24,7 +24,9 @@
       "enableFiltering": false,
       "wpEnTitle": "Announcement Dashboard",
       "wpArTitle": "لوحة إعلانات",
-      "language": "en"
+      "language": "en",
+      "headerBackgroundColor": "#0078d4",
+      "headerTextColor": "#ffffff"
     }
   }]
 }
