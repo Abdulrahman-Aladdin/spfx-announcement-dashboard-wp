@@ -1,3 +1,5 @@
+import { SPFI } from "@pnp/sp";
+
 export interface IAnnouncementDashboardProps {
   enTitle: string;
   arTitle: string;
@@ -8,4 +10,5 @@ export interface IAnnouncementDashboardProps {
   language: string;
   headerBackgroundColor: string;
   headerTextColor: string;
+  sp: SPFI;
 }

@@ -19,6 +19,11 @@ import { PropertyFieldToggleWithCallout } from '@pnp/spfx-property-controls/lib/
 import { PropertyFieldSliderWithCallout } from '@pnp/spfx-property-controls/lib/PropertyFieldSliderWithCallout';
 import { PropertyFieldColorPicker, PropertyFieldColorPickerStyle } from '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker';
 
+import { spfi, SPFI, SPFx } from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/lists";
+import "@pnp/sp/items";
+
 export interface IAnnouncementDashboardWebPartProps {
   wpEnTitle: string;
   wpArTitle: string;
@@ -34,6 +39,7 @@ export interface IAnnouncementDashboardWebPartProps {
 export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<IAnnouncementDashboardWebPartProps> {
   private strings: IAnnouncementDashboardWebPartStrings;
   private directtion: 'rtl' | 'ltr';
+  private sp: SPFI;
 
   private getStrings(): IAnnouncementDashboardWebPartStrings {
     return this.properties.language === 'ar' ? arStrings : enStrings;
@@ -48,6 +54,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
     this.strings = this.getStrings();
     this.directtion = this.getDirection();
     this.domElement.setAttribute('dir', this.directtion);
+    this.sp = spfi().using(SPFx(this.context));
     return super.onInit();
   }
 
@@ -63,7 +70,8 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
         numberOfItems: this.properties.numberOfItems,
         language: this.properties.language,
         headerBackgroundColor: this.properties.headerBackgroundColor,
-        headerTextColor: this.properties.headerTextColor
+        headerTextColor: this.properties.headerTextColor,
+        sp: this.sp
       }
     );
 
@@ -159,7 +167,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   step: 1,
                   showValue: true,
                   value: this.properties.numberOfItems,
-                  debounce: 10
+                  debounce: 500
                 }),
                 PropertyFieldChoiceGroupWithCallout('language', {
                   calloutContent: React.createElement('div', {}, this.strings.LanguageCalloutContent),
@@ -182,7 +190,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
                   disabled: false,
-                  debounce: 10,
+                  debounce: 100,
                   isHidden: false,
                   alphaSliderHidden: false,
                   style: PropertyFieldColorPickerStyle.Full,
@@ -195,7 +203,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
                   disabled: false,
-                  debounce: 10,
+                  debounce: 100,
                   isHidden: false,
                   alphaSliderHidden: false,
                   style: PropertyFieldColorPickerStyle.Full,
