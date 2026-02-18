@@ -1,0 +1,40 @@
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+}
+
+.th {
+  padding: 8px 12px;
+  border-bottom: 2px solid #eaeaea;
+  text-align: left;
+  font-weight: 600;
+}
+
+.td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f3f2f1;
+  color: #323130;
+  background: #fff;
+}
+
+.compactTh {
+  padding: 4px 8px;
+  font-size: 13px;
+  background: #f3f2f1;
+  color: #605e5c;
+}
+
+.compactTd {
+  padding: 4px 8px;
+  font-size: 13px;
+  background: #f8f8f8;
+}
