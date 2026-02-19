@@ -1,6 +1,8 @@
 .tableWrapper {
   width: 100%;
   overflow-x: auto;
+  min-height: 100px;
+  max-height: 400px;
 }
 
 .table {

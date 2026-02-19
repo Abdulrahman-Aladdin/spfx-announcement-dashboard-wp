@@ -7,6 +7,7 @@ import styles from "./AnnouncementDashboard.module.scss";
 import TableLayout from "./TableLayout/TableLayout";
 import CardLayout from "./CardLayout/CardLayout";
 import { formatData } from "../utils/utilFn";
+import PaginationControls from "./Actions/PaginationControls";
 
 export default function AnnouncementDashboard(
   props: IAnnouncementDashboardProps,
@@ -25,6 +26,7 @@ export default function AnnouncementDashboard(
   } = props;
 
   const allItems = React.useRef<FlattenedAnnouncementItem[]>([]);
+  const [pageIndex, setPageIndex] = React.useState<number>(0);
   const [filteredItems, setFilteredItems] = React.useState<
     FlattenedAnnouncementItem[]
   >([]);
@@ -51,9 +53,12 @@ export default function AnnouncementDashboard(
           .getById(listId)
           .items.select(...selectAttributes)
           .expand(...expandAttributes)
-          .top(numberOfItems)();
+          .top(5000)();
+
+        console.log("Fetched items:", items);
 
         allItems.current = flattenItems(items);
+        setFilteredItems(allItems.current);
       } catch (error) {
         console.error("Error fetching data from SharePoint:", error);
       }
@@ -62,7 +67,18 @@ export default function AnnouncementDashboard(
     fetchData().catch((error) => {
       console.error("Error in fetchData:", error);
     });
-  }, [listId, numberOfItems, sp, language]);
+  }, [listId, sp, language]);
+
+  const getPaged = (): FlattenedAnnouncementItem[] => {
+    const start = pageIndex * numberOfItems;
+    return filteredItems.slice(start, start + numberOfItems);
+  };
+
+  const totalPages = Math.ceil(filteredItems.length / numberOfItems);
+
+  React.useEffect(() => {
+    setPageIndex(0);
+  }, [numberOfItems, filteredItems]);
 
   return (
     <section>
@@ -81,15 +97,22 @@ export default function AnnouncementDashboard(
           setFilteredItems={setFilteredItems}
         />
       )}
-      {(layoutStyle === "compact" || layoutStyle === "table") && (
-        <TableLayout
-          data={filteredItems}
-          mode={layoutStyle}
-          headerBackgroundColor={headerBackgroundColor}
-          headerTextColor={headerTextColor}
+      <div className={styles.dataContainer}>
+        {(layoutStyle === "compact" || layoutStyle === "table") && (
+          <TableLayout
+            data={getPaged()}
+            mode={layoutStyle}
+            headerBackgroundColor={headerBackgroundColor}
+            headerTextColor={headerTextColor}
+          />
+        )}
+        {layoutStyle === "card" && <CardLayout data={getPaged()} />}
+        <PaginationControls
+          pageIndex={pageIndex}
+          setPageIndex={setPageIndex}
+          totalPages={totalPages}
         />
-      )}
-      {layoutStyle === "card" && <CardLayout data={filteredItems} />}
+      </div>
     </section>
   );
 }

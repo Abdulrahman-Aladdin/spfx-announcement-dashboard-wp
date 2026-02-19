@@ -47,7 +47,6 @@ export default function TableLayout(
     );
   }
 
-  // Default: normal table
   return (
     <div className={tableStyles.tableWrapper}>
       <table className={tableStyles.table}>
