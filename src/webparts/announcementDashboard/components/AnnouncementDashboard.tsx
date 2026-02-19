@@ -30,7 +30,8 @@ export default function AnnouncementDashboard(
   const [pageIndex, setPageIndex] = React.useState<number>(0);
   const [filteredItems, setFilteredItems] = React.useState<
     FlattenedAnnouncementItem[]
-  >([]);
+    >([]);
+  const [dataToDisplay, setDataToDisplay] = React.useState<FlattenedAnnouncementItem[]>([]);
 
   React.useEffect(() => {
     async function fetchData(): Promise<void> {
@@ -42,6 +43,8 @@ export default function AnnouncementDashboard(
           .top(5000)();
 
         allItems.current = flattenItems(items, language);
+        setFilteredItems(allItems.current);
+        setDataToDisplay(allItems.current);
         setFilteredItems(allItems.current);
       } catch (error) {
         console.error("Error fetching data from SharePoint:", error);
@@ -55,14 +58,14 @@ export default function AnnouncementDashboard(
 
   const getPaged = (): FlattenedAnnouncementItem[] => {
     const start = pageIndex * numberOfItems;
-    return filteredItems.slice(start, start + numberOfItems);
+    return dataToDisplay.slice(start, start + numberOfItems);
   };
 
-  const totalPages = Math.ceil(filteredItems.length / numberOfItems);
+  const totalPages = Math.ceil(dataToDisplay.length / numberOfItems);
 
   React.useEffect(() => {
     setPageIndex(0);
-  }, [numberOfItems, filteredItems]);
+  }, [numberOfItems, dataToDisplay]);
 
   return (
     <section>
@@ -81,7 +84,7 @@ export default function AnnouncementDashboard(
           setFilteredItems={setFilteredItems}
         />
       )}
-      <SortingComponent allData={filteredItems} setFilteredItems={setFilteredItems} />
+      <SortingComponent allData={filteredItems} setFilteredItems={setDataToDisplay} />
       <div className={styles.dataContainer}>
         {(layoutStyle === "compact" || layoutStyle === "table") && (
           <TableLayout
