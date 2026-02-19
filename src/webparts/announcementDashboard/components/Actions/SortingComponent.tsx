@@ -5,16 +5,20 @@ import {
   SortingComponentProps,
 } from "../../utils/types";
 import { listColumns } from "../../utils/constants";
+import arStrings from "../../loc/ar-sa";
+import enStrings from "../../loc/en-us";
 
 export default function SortingComponent(
   props: SortingComponentProps,
 ): React.ReactElement<SortingComponentProps> {
-  const { allData, setFilteredItems } = props;
+  const { allData, setFilteredItems, language } = props;
+
+  const strings = language === 'ar' ? arStrings : enStrings;
 
   const [selectedColumn, setSelectedColumn] = React.useState<string>(
     listColumns[0],
   );
-  
+
   const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
     "asc",
   );
@@ -58,7 +62,7 @@ export default function SortingComponent(
   return (
     <div className={styles.sortingComponent}>
       <label htmlFor="sort-column" className={styles.sortLabel}>
-        Sort by:
+        {strings.sortByLabel}
       </label>
       <select
         id="sort-column"
@@ -66,9 +70,9 @@ export default function SortingComponent(
         value={selectedColumn}
         onChange={(e) => setSelectedColumn(e.target.value)}
       >
-        {listColumns.map((column) => (
+        {listColumns.map((column, index) => (
           <option key={column} value={column}>
-            {column}
+            {strings.locListColumns[index]}
           </option>
         ))}
       </select>
@@ -81,7 +85,7 @@ export default function SortingComponent(
             checked={sortDirection === "asc"}
             onChange={() => setSortDirection("asc")}
           />
-          Ascending
+          {strings.ascending}
         </label>
         <label className={styles.sortRadioLabel}>
           <input
@@ -91,7 +95,7 @@ export default function SortingComponent(
             checked={sortDirection === "desc"}
             onChange={() => setSortDirection("desc")}
           />
-          Descending
+          {strings.descending}
         </label>
       </div>
     </div>

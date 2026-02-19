@@ -2,14 +2,18 @@ import * as React from "react";
 import { TableProps } from "../../utils/types";
 import { listColumns } from "../../utils/constants";
 import tableStyles from "../TableLayout.module.scss";
+import arStrings from "../../loc/ar-sa";
+import enStrings from "../../loc/en-us";
 
 export default function TableLayout(
   props: TableProps,
 ): React.ReactElement<TableProps> {
-  const { data, mode, headerBackgroundColor, headerTextColor } = props;
+  const { data, mode, headerBackgroundColor, headerTextColor, language } = props;
 
   const thStyle = mode === 'compact' ? tableStyles.compactTh : tableStyles.th;
   const tdStyle = mode === 'compact' ? tableStyles.compactTd : tableStyles.td;
+
+  const strings = language === 'ar' ? arStrings : enStrings;
 
   return (
     <div className={tableStyles.tableWrapper}>
@@ -25,7 +29,7 @@ export default function TableLayout(
                   color: headerTextColor,
                 }}
               >
-                {column}
+                {strings.locListColumns[index]}
               </th>
             ))}
           </tr>

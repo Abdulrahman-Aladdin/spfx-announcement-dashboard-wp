@@ -20,6 +20,7 @@ export type FlattenedAnnouncementItem = {
 
 export type ListActionsProps = {
   allData: FlattenedAnnouncementItem[];
+  language: string;
   setFilteredItems: (items: FlattenedAnnouncementItem[]) => void;
 };
 
@@ -28,6 +29,7 @@ export type TableProps = {
   mode: 'table' | 'compact';
   headerBackgroundColor: string;
   headerTextColor: string;
+  language: string;
 };
 
 export type CardLayoutProps = {
@@ -36,5 +38,13 @@ export type CardLayoutProps = {
 
 export type SortingComponentProps = {
   allData: FlattenedAnnouncementItem[];
+  language: string;
   setFilteredItems: (items: FlattenedAnnouncementItem[]) => void;
 };
+
+export type PaginationProps = {
+  pageIndex: number;
+  setPageIndex: React.Dispatch<React.SetStateAction<number>>;
+  totalPages: number;
+  language: string;
+}

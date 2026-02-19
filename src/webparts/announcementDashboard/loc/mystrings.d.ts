@@ -36,6 +36,15 @@ export declare interface IAnnouncementDashboardWebPartStrings {
   LanguageCalloutContent: string;
   LanguageEnglish: string;
   LanguageArabic: string;
+  
+  sortByLabel: string;
+  locListColumns: string[];
+  ascending: string;
+  descending: string;
+  clearAllFilters: string;
+  pageLabel: string;
+  ofLabel: string;
+  filterByColumn: string;
 }
 
 declare module 'AnnouncementDashboardWebPartStrings' {

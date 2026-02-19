@@ -81,10 +81,15 @@ export default function AnnouncementDashboard(
       {enableFiltering && (
         <FilterComponent
           allData={allItems.current}
+          language={language}
           setFilteredItems={setFilteredItems}
         />
       )}
-      <SortingComponent allData={filteredItems} setFilteredItems={setDataToDisplay} />
+      <SortingComponent
+        allData={filteredItems}
+        setFilteredItems={setDataToDisplay}
+        language={language}
+      />
       <div className={styles.dataContainer}>
         {(layoutStyle === "compact" || layoutStyle === "table") && (
           <TableLayout
@@ -92,6 +97,7 @@ export default function AnnouncementDashboard(
             mode={layoutStyle}
             headerBackgroundColor={headerBackgroundColor}
             headerTextColor={headerTextColor}
+            language={language}
           />
         )}
         {layoutStyle === "card" && <CardLayout data={getPaged()} />}
@@ -99,6 +105,7 @@ export default function AnnouncementDashboard(
           pageIndex={pageIndex}
           setPageIndex={setPageIndex}
           totalPages={totalPages}
+          language={language}
         />
       </div>
     </section>

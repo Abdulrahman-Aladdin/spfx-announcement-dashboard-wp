@@ -2,14 +2,18 @@ import * as React from "react";
 import { FlattenedAnnouncementItem, ListActionsProps } from "../../utils/types";
 import { listColumns } from "../../utils/constants";
 import styles from "../AnnouncementDashboard.module.scss";
+import arStrings from "../../loc/ar-sa";
+import enStrings from "../../loc/en-us";
 
 export default function FilterComponent(
   props: ListActionsProps,
 ): React.ReactElement<ListActionsProps> {
-  const { allData, setFilteredItems } = props;
+  const { allData, setFilteredItems, language } = props;
 
   const [filter, setFilter] = React.useState<Record<string, Set<string>>>({});
   const [openColumn, setOpenColumn] = React.useState<string | null>(null);
+
+  const strings = language === 'ar' ? arStrings : enStrings;
 
   const uniqueValues = React.useMemo(() => {
     const result: Record<string, Set<string>> = {};
@@ -68,15 +72,15 @@ export default function FilterComponent(
 
   return (
     <>
-      <h3>Filter by column:</h3>
+      <h3>{strings.filterByColumn}</h3>
       <section className={styles.filterSection}>
-        {listColumns.map((column: string) => (
+        {listColumns.map((column: string, index: number) => (
           <div key={column} className={styles.filterField}>
             <button
               className={`${styles.filterButton} ${openColumn === column ? styles.active : ""}`}
               onClick={() => toggleColumn(column)}
             >
-              <span>{column}</span>
+              <span>{strings.locListColumns[index]}</span>
               <span>({filter[column]?.size || 0})</span>
             </button>
             {openColumn === column && (
@@ -96,7 +100,7 @@ export default function FilterComponent(
           </div>
         ))}
         <button className={styles.clearAllButton} onClick={() => setFilter({})}>
-          Clear All
+          {strings.clearAllFilters}
         </button>
       </section>
     </>

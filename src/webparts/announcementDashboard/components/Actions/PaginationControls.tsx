@@ -1,12 +1,13 @@
 import * as React from "react";
 import styles from "../AnnouncementDashboard.module.scss";
+import { PaginationProps } from "../../utils/types";
+import arStrings from "../../loc/ar-sa";
+import enStrings from "../../loc/en-us";
 
-export default function PaginationControls(props: {
-  pageIndex: number;
-  setPageIndex: React.Dispatch<React.SetStateAction<number>>;
-  totalPages: number;
-}): React.ReactElement {
-  const { pageIndex, setPageIndex, totalPages } = props;
+export default function PaginationControls(props: PaginationProps): React.ReactElement {
+  const { pageIndex, setPageIndex, totalPages, language } = props;
+
+  const strings = language === 'ar' ? arStrings : enStrings;
 
   return (
     <div className={styles.pageControls}>
@@ -17,7 +18,7 @@ export default function PaginationControls(props: {
         &lt;&lt;
       </button>
       <span>
-        Page {pageIndex + 1} of {totalPages}
+        {strings.pageLabel} {pageIndex + 1} {strings.ofLabel} {totalPages}
       </span>
       <button
         onClick={() =>
