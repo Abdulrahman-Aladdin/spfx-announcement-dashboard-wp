@@ -1,7 +1,7 @@
 import * as React from "react";
-import { FlattenedAnnouncementItem, ListActionsProps } from "../utils/types";
-import { listColumns } from "../utils/constants";
-import styles from "./AnnouncementDashboard.module.scss";
+import { FlattenedAnnouncementItem, ListActionsProps } from "../../utils/types";
+import { listColumns } from "../../utils/constants";
+import styles from "../AnnouncementDashboard.module.scss";
 
 export default function FilterComponent(
   props: ListActionsProps,

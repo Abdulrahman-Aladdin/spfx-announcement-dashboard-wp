@@ -1,14 +1,12 @@
 import * as React from "react";
 import type { IAnnouncementDashboardProps } from "./IAnnouncementDashboardProps";
-import {
-  selectAttributes,
-  expandAttributes,
-} from "../utils/constants";
+import { selectAttributes, expandAttributes } from "../utils/constants";
 import { AnnouncementItem, FlattenedAnnouncementItem } from "../utils/types";
-import FilterComponent from "./FilterComponent";
+import FilterComponent from "./Actions/FilterComponent";
 import styles from "./AnnouncementDashboard.module.scss";
-import TableLayout from "./TableLayout";
-import CardLayout from "./CardLayout";
+import TableLayout from "./TableLayout/TableLayout";
+import CardLayout from "./CardLayout/CardLayout";
+import { formatData } from "../utils/utilFn";
 
 export default function AnnouncementDashboard(
   props: IAnnouncementDashboardProps,
@@ -29,15 +27,20 @@ export default function AnnouncementDashboard(
   const allItems = React.useRef<FlattenedAnnouncementItem[]>([]);
   const [filteredItems, setFilteredItems] = React.useState<
     FlattenedAnnouncementItem[]
-    >([]);
-  
-  const formatDate = (dateString: string): string => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString(language === "ar" ? "ar-SA" : "en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+  >([]);
+
+  const flattenItems = (
+    items: AnnouncementItem[],
+  ): FlattenedAnnouncementItem[] => {
+    return items.map((item: AnnouncementItem): FlattenedAnnouncementItem => {
+      return {
+        Title: item.Title || "",
+        Description: item.Description || "",
+        Category: item.Category || "",
+        Priority: item.Priority || "",
+        DueDate: formatData(item.DueDate || "", language),
+        AssignedTo: item.AssignedTo ? item.AssignedTo.Title : "Unassigned",
+      };
     });
   };
 
@@ -49,22 +52,8 @@ export default function AnnouncementDashboard(
           .items.select(...selectAttributes)
           .expand(...expandAttributes)
           .top(numberOfItems)();
-        console.log("Items in the list:", items);
-        allItems.current = items.map(
-          (item: AnnouncementItem): FlattenedAnnouncementItem => {
-            return {
-              Title: item.Title || "",
-              Description: item.Description || "",
-              Category: item.Category || "",
-              Priority: item.Priority || "",
-              DueDate: formatDate(item.DueDate || ""),
-              AssignedTo: item.AssignedTo
-                ? item.AssignedTo.Title
-                : "Unassigned",
-            };
-          },
-        );
-        setFilteredItems(allItems.current);
+
+        allItems.current = flattenItems(items);
       } catch (error) {
         console.error("Error fetching data from SharePoint:", error);
       }
@@ -73,7 +62,7 @@ export default function AnnouncementDashboard(
     fetchData().catch((error) => {
       console.error("Error in fetchData:", error);
     });
-  }, [listId, numberOfItems, sp]);
+  }, [listId, numberOfItems, sp, language]);
 
   return (
     <section>

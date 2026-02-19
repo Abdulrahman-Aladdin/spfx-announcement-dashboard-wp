@@ -1,6 +1,6 @@
 import * as React from "react";
-import { CardLayoutProps } from "../utils/types";
-import styles from "./CardLayout.module.scss";
+import { CardLayoutProps } from "../../utils/types";
+import styles from "../CardLayout.module.scss";
 
 export default function CardLayout(
   props: CardLayoutProps,

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { TableProps } from "../utils/types";
-import { listColumns } from "../utils/constants";
-import tableStyles from "./TableLayout.module.scss";
+import { TableProps } from "../../utils/types";
+import { listColumns } from "../../utils/constants";
+import tableStyles from "../TableLayout.module.scss";
 
 export default function TableLayout(
   props: TableProps,
