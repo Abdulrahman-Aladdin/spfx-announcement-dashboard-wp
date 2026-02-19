@@ -6,8 +6,9 @@ import FilterComponent from "./Actions/FilterComponent";
 import styles from "./AnnouncementDashboard.module.scss";
 import TableLayout from "./TableLayout/TableLayout";
 import CardLayout from "./CardLayout/CardLayout";
-import { formatData } from "../utils/utilFn";
+import { flattenItems } from "../utils/utilFn";
 import PaginationControls from "./Actions/PaginationControls";
+import SortingComponent from "./Actions/SortingComponent";
 
 export default function AnnouncementDashboard(
   props: IAnnouncementDashboardProps,
@@ -31,21 +32,6 @@ export default function AnnouncementDashboard(
     FlattenedAnnouncementItem[]
   >([]);
 
-  const flattenItems = (
-    items: AnnouncementItem[],
-  ): FlattenedAnnouncementItem[] => {
-    return items.map((item: AnnouncementItem): FlattenedAnnouncementItem => {
-      return {
-        Title: item.Title || "",
-        Description: item.Description || "",
-        Category: item.Category || "",
-        Priority: item.Priority || "",
-        DueDate: formatData(item.DueDate || "", language),
-        AssignedTo: item.AssignedTo ? item.AssignedTo.Title : "Unassigned",
-      };
-    });
-  };
-
   React.useEffect(() => {
     async function fetchData(): Promise<void> {
       try {
@@ -55,9 +41,7 @@ export default function AnnouncementDashboard(
           .expand(...expandAttributes)
           .top(5000)();
 
-        console.log("Fetched items:", items);
-
-        allItems.current = flattenItems(items);
+        allItems.current = flattenItems(items, language);
         setFilteredItems(allItems.current);
       } catch (error) {
         console.error("Error fetching data from SharePoint:", error);
@@ -97,6 +81,7 @@ export default function AnnouncementDashboard(
           setFilteredItems={setFilteredItems}
         />
       )}
+      <SortingComponent allData={filteredItems} setFilteredItems={setFilteredItems} />
       <div className={styles.dataContainer}>
         {(layoutStyle === "compact" || layoutStyle === "table") && (
           <TableLayout

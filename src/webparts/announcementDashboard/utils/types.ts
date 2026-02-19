@@ -33,3 +33,8 @@ export type TableProps = {
 export type CardLayoutProps = {
   data: FlattenedAnnouncementItem[];
 };
+
+export type SortingComponentProps = {
+  allData: FlattenedAnnouncementItem[];
+  setFilteredItems: (items: FlattenedAnnouncementItem[]) => void;
+};
