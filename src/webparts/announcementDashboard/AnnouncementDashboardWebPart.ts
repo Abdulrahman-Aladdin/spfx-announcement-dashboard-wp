@@ -167,7 +167,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   step: 1,
                   showValue: true,
                   value: this.properties.numberOfItems,
-                  debounce: 500
+                  debounce: 10
                 }),
                 PropertyFieldChoiceGroupWithCallout('language', {
                   calloutContent: React.createElement('div', {}, this.strings.LanguageCalloutContent),
@@ -190,7 +190,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
                   disabled: false,
-                  debounce: 100,
+                  debounce: 10,
                   isHidden: false,
                   alphaSliderHidden: false,
                   style: PropertyFieldColorPickerStyle.Full,
@@ -203,7 +203,7 @@ export default class AnnouncementDashboardWebPart extends BaseClientSideWebPart<
                   onPropertyChange: this.onPropertyPaneFieldChanged,
                   properties: this.properties,
                   disabled: false,
-                  debounce: 100,
+                  debounce: 10,
                   isHidden: false,
                   alphaSliderHidden: false,
                   style: PropertyFieldColorPickerStyle.Full,
